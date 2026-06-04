@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>will you be my boyfriend?</title>
+    <title>Be My Valentine</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -114,14 +114,17 @@
         }
         @keyframes floatHint { 0%,100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, -5px); } }
 
-        /* Hidden Items */
+        /* Hidden Items (ปรับขนาดให้ยืดหยุ่นตามหน้าจอ Responsive ไม่ล้น) */
         .hidden-item {
-            position: absolute; width: 45px; height: 55px; cursor: pointer;
+            position: absolute; 
+            width: 50px; max-width: 12vw;
+            height: auto; aspect-ratio: 3/4;
+            cursor: pointer;
             z-index: 10; opacity: 0.9; transition: transform 0.2s;
-            background: white; padding: 3px; border-radius: 3px; box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            background: white; padding: 4px; border-radius: 4px; box-shadow: 0 3px 10px rgba(0,0,0,0.2);
         }
         .hidden-item:hover { transform: scale(1.1); filter: brightness(1.2); }
-        .hidden-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 2px; }
+        .hidden-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 2px; display: block; }
 
         /* Inventory */
         .inventory {
@@ -137,28 +140,45 @@
         .inv-slot.filled { background: white; border: 2px solid var(--primary); }
         .inv-slot.filled img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* Modal Preview */
+        /* Modal Preview (แก้ไขส่วนนี้เพื่อป้องกันรูปภาพล้นหน้าจอ) */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.7); z-index: 100;
             display: none; align-items: center; justify-content: center;
             backdrop-filter: blur(5px);
+            padding: 20px; box-sizing: border-box;
         }
         .modal-card {
-            background: white; padding: 15px 15px 30px 15px;
-            border-radius: 10px; 
-            max-width: 280px; text-align: center;
+            background: white; padding: 15px;
+            border-radius: 15px; 
+            width: 100%; max-width: 300px; /* จำกัดความกว้างสูงสุด */
+            max-height: 85vh; /* จำกัดความสูงไม่ให้ล้นจอแนวตั้ง */
+            display: flex; flex-direction: column; align-items: center;
+            text-align: center;
             box-shadow: 0 20px 50px rgba(0,0,0,0.3);
             animation: zoomIn 0.3s ease;
+            box-sizing: border-box;
         }
-        .modal-card img { width: 100%; border-radius: 3px; margin-bottom: 10px; }
+        .modal-card img { 
+            width: 100%; 
+            max-height: 45vh; /* ควบคุมไม่ให้รูปภาพสูงเกินไปจนดันปุ่มและข้อความตกจอ */
+            object-fit: contain; /* ปรับให้รูปแสดงครบสัดส่วน ไม่โดนตัดขอบ */
+            border-radius: 8px; 
+            margin-bottom: 12px; 
+        }
+        #previewCaption {
+            font-weight: 400; color: #555; margin: 5px 0;
+            font-size: 0.95rem; line-height: 1.4;
+            max-height: 70px; overflow-y: auto; /* เผื่อข้อความยาวเกินไป */
+        }
         .btn-keep {
             background: var(--primary); color: white; border: none;
             padding: 10px 25px; border-radius: 30px; font-family: 'Kanit';
-            font-size: 1rem; cursor: pointer; margin-top: 15px;
+            font-size: 1rem; cursor: pointer; margin-top: 12px; flex-shrink: 0;
             box-shadow: 0 5px 10px rgba(255, 92, 138, 0.4);
+            width: 80%;
         }
-        @keyframes zoomIn { from { transform: scale(0.5); } to { transform: scale(1); } }
+        @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
         /* --- FINAL MESSAGE (Slow Animation) --- */
         .final-msg-container {
@@ -204,7 +224,7 @@
 
     <div id="page1" class="page active">
         <div class="chase-area">
-            <h2 style="text-align:center; margin-top:100px; color:var(--accent);">จดหมายฉบับนี้<br>ต้องใช้ความพยายามนะ! 😝</h2>
+            <h2 style="text-align:center; margin-top:100px; color:var(--accent);">จดหมายขอเป็นแฟนฉบับนี้<br>ต้องใช้ความพยายามนะ! 😝</h2>
             <div class="flying-envelope" id="envelope" onmouseover="moveEnv()" ontouchstart="moveEnvMobile(event)">
                 <div class="wing left"></div><div class="env-body">💌</div><div class="wing right"></div>
             </div>
@@ -236,7 +256,7 @@
             <img src="photo7.jpg" style="width:100%; height:100%; object-fit:cover;">
             <canvas id="scratchCanvas" width="300" height="300" style="position:absolute; top:0; left:0; cursor:pointer;"></canvas>
         </div>
-        <p style="margin-top:15px; color:#888;">ขูดให้สะอาดเลยนะ</p>
+        <p style="margin-top:15px; color:#888;">ขูดให้สะอาดเลยนะ (90%)</p>
     </div>
 
     <div id="page4" class="page" style="padding:0;">
@@ -258,7 +278,7 @@
     <div class="modal-overlay" id="previewModal">
         <div class="modal-card">
             <img src="" id="previewImg">
-            <p id="previewCaption" style="font-weight:600; color:#555; margin:0;">...</p>
+            <p id="previewCaption">...</p>
             <button class="btn-keep" onclick="confirmKeep()">เก็บใส่กระเป๋า ❤️</button>
         </div>
     </div>
@@ -267,15 +287,14 @@
         <div class="final-floaters" id="finalFloaters"></div>
         
         <div class="final-msg-box">
-            <h1>เป็นแฟนกันนะ! 💖</h1>
+            <h1>นารินร้ากเฟียสที่สุดเลยนะคะ</h1>
             <p>
-                นารินร้ากเฟียสที่สุดเลยนะคะ<br>
                 อยากอยู่คุยกะเฟียสไปนานๆ<br>
                 เค้าชอบเวลาคุยกะเฟียสส<br>
                 คุยด่วยแล่วสบายจายม้ากๆ<br>
                 นารินม่ายเคยเบื่อเฟียสเล้ยย<br>
-                เฟียสเข้าใจเค้าม้ากๆ นารินรัก<br>
-                เฟียสนะคะะ
+                เฟียสเข้าใจเค้าม้ากๆ<br>
+                นารินรักเฟียสนะคะะ
             </p>
         </div>
     </div>
@@ -284,11 +303,11 @@
         // --- CONFIG ---
         const startDate = new Date(2026, 4, 20); // เดือน 4 คือ พฤษภาคมใน JavaScript (0=ม.ค., 4=พ.ค.)
         const photos = [
-            { src: "photo1.jpg", caption: "เวลาเฟียสส่งรูปมาให้เค้าดู\nน่ารักม้าก" },
-            { src: "photo2.jpg", caption: "เวลาเฟียสง้อนารินเฟียสน่ารักม้ากๆ\nนารินชอบเวลาเฟียสง้อทิ่สุ้ดดด" },
-            { src: "photo3.jpg", caption: "เค้าชอบม้ากกเวลาที่เค้าโทรคุยกะเฟียสส\nคุยล่ะสบายใจที่สุ้ดด" },
-            { src: "photo4.jpg", caption: "นารินชอบบเวลาเฟียสลงเพลงเส้า\nล่ะมาบอกนาริน\nเพราะนารินคิดม้ากกก" },
-            { src: "photo5.jpg", caption: "เค้าตั้งวอเปเป้อเปนรุปเหียสส\nเวลาเห้นแล่วหายเหนื่อยย" }
+            { src: "photo1.jpg", caption: "เวลาเฟียสส่งรูปมาให้เค้าดู น่ารักม้าก" },
+            { src: "photo2.jpg", caption: "เวลาเฟียสง้อนารินเฟียสน่ารักม้ากๆ นารินชอบเวลาเฟียสง้อทิ่สุ้ดดด" },
+            { src: "photo3.jpg", caption: "เค้าชอบม้ากกเวลาที่เค้าโทรคุยกะเฟียสส คุยล่ะสบายใจที่สุ้ดด" },
+            { src: "photo4.jpg", caption: "นารินชอบบเวลาเฟียสลงเพลงเส้า ล่ะมาบอกนารินเพราะ นารินคิดม้ากกก" },
+            { src: "photo5.jpg", caption: "เค้าตั้งวอเปเป้อเปนรุปเหียสส เวลาเห้นแล่วหายเหนื่อยย" }
         ];
 
         // --- GLOBAL: AUDIO & BACKGROUND ---
@@ -377,7 +396,7 @@
                 ctx.globalCompositeOperation = 'destination-out'; ctx.beginPath(); ctx.arc(x,y,25,0,Math.PI*2); ctx.fill();
                 const d = ctx.getImageData(0,0,300,300).data; let t = 0;
                 for(let i=3; i<d.length; i+=4) if(d[i]===0) t++;
-                if(t/(300*300) > 0.6) { c.style.display = 'none'; setTimeout(() => goTo('page4'), 1000); }
+                if(t/(300*300) > 0.9) { c.style.display = 'none'; setTimeout(() => goTo('page4'), 1000); }
             }
             const down = () => isDrawing=true; const up = () => isDrawing=false;
             const move = (e) => { if(!isDrawing) return; const r = c.getBoundingClientRect(); scratch((e.touches?e.touches[0].clientX:e.clientX)-r.left, (e.touches?e.touches[0].clientY:e.clientY)-r.top); }
@@ -401,9 +420,7 @@
                 slot.classList.add('filled'); slot.innerHTML = `<img src="${photos[currentPhotoIdx-1].src}">`;
                 collected++;
                 if(collected === 5) {
-                    // Create floaters specifically for final page
                     createFloaters('finalFloaters', 30);
-                    // Show final message
                     setTimeout(() => {
                         document.getElementById('finalMsgContainer').classList.add('show-final');
                     }, 800);
